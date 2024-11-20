@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbone - Secciones</title>
+    <style>
+        /* General */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            color: #2c3e50;
+            margin: 40px 0 20px;
+        }
+
+        .section-container {
+            padding: 40px 20px;
+            background: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .card-text {
+            position: absolute;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .card-text:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sección Café -->
+    <section class="section-container">
+        <h2>El Arte del Café</h2>
+        <div class="cards-container">
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/4a2c2a/ffffff?text=Café+1" alt="Café 1">
+                <div class="card-text">"El café transforma las mañanas en poesía líquida."</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/6b4f41/ffffff?text=Café+2" alt="Café 2">
+                <div class="card-text">"Cada taza de café es un nuevo comienzo."</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/8b5e4e/ffffff?text=Café+3" alt="Café 3">
+                <div class="card-text">"La mejor conversación comienza con café."</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Productos de Belleza -->
+    <section class="section-container">
+        <h2>Productos de Belleza</h2>
+        <div class="cards-container">
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/e8a0bf/ffffff?text=Belleza+1" alt="Belleza 1">
+                <div class="card-text">"Realza tu belleza natural con nuestros productos."</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/f9d3e1/ffffff?text=Belleza+2" alt="Belleza 2">
+                <div class="card-text">"Cuidado personal con ingredientes de calidad."</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/ffc0cb/ffffff?text=Belleza+3" alt="Belleza 3">
+                <div class="card-text">"Belleza y confianza en cada detalle."</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Productos de Limpieza -->
+    <section class="section-container">
+        <h2>Productos de Limpieza</h2>
+        <div class="cards-container">
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/a1d6e2/ffffff?text=Limpieza+1" alt="Limpieza 1">
+                <div class="card-text">"Productos que cuidan tu hogar y el planeta."</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/75c9c8/ffffff?text=Limpieza+2" alt="Limpieza 2">
+                <div class="card-text">"Eficiencia y frescura en cada limpieza."</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/400x250/57b8c3/ffffff?text=Limpieza+3" alt="Limpieza 3">
+                <div class="card-text">"Tu aliado para un espacio impecable."</div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

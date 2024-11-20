@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbone - Noticias</title>
+    <style>
+        /* General */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Encabezado */
+        header {
+            background: linear-gradient(90deg, #2c3e50, #4ca1af);
+            color: white;
+            text-align: center;
+            padding: 40px 10px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 1.3rem;
+            font-weight: 300;
+        }
+
+        /* Menú de Navegación */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem 0;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-size: 1rem;
+            color: #333;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #4ca1af;
+        }
+
+        /* Sección Noticias */
+        #noticias {
+            padding: 60px 20px;
+            background: #ffffff;
+            text-align: center;
+            position: relative;
+        }
+
+        #noticias h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .noticias-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .noticia-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .noticia-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .noticia-content {
+            padding: 20px;
+        }
+
+        .noticia-content h3 {
+            font-size: 1.5rem;
+            margin: 0 0 10px;
+            color: #4ca1af;
+        }
+
+        .noticia-content p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .noticia-content a {
+            display: inline-block;
+            color: #2c3e50;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .noticia-content a:hover {
+            color: #4ca1af;
+        }
+
+        /* Botón Agregar */
+        .boton-agregar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #00acac;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+
+        .boton-agregar:hover {
+            background: #f8a51b;
+            transform: scale(1.1);
+        }
+
+        /* Formulario Nueva Noticia */
+        #form-nueva-noticia {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 400px;
+            width: 90%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        #form-nueva-noticia input,
+        #form-nueva-noticia textarea {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #form-nueva-noticia button {
+            background: #00acac;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        #form-nueva-noticia button:hover {
+            background: #f8a51b;
+        }
+
+        /* Fondo Oscuro */
+        #fondo-oscuro {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <h1>Carbone</h1>
+        <p>Empoderando mujeres para transformar sus vidas</p>
+    </header>
+
+    <!-- Menú de Navegación -->
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="noticias.html">Noticias</a>
+        <a href="about.html">Nosotros</a>
+        <a href="contact.html">Contacto</a>
+        <a href="aplicar.html">Aplicar</a>
+    </nav>
+
+    <!-- Sección Noticias -->
+    <section id="noticias">
+        <h2>Noticias</h2>
+        <div class="noticias-container" id="contenedor-noticias">
+            <!-- Aquí se agregarán las noticias dinámicamente -->
+        </div>
+    </section>
+
+    <!-- Botón Agregar Noticia -->
+    <button class="boton-agregar" onclick="mostrarFormulario()">+</button>
+
+    <!-- Fondo Oscuro -->
+    <div id="fondo-oscuro" onclick="ocultarFormulario()"></div>
+
+    <!-- Formulario Nueva Noticia -->
+    <div id="form-nueva-noticia">
+        <input type="password" id="clave" placeholder="Clave (123456)" required>
+        <input type="text" id="titulo" placeholder="Título de la Noticia" required>
+        <input type="date" id="fecha" required>
+        <textarea id="contenido" placeholder="Contenido de la Noticia" rows="5" required></textarea>
+        <input type="url" id="imagen" placeholder="URL de la Imagen (opcional)">
+        <button onclick="agregarNoticia()">Publicar</button>
+    </div>
+
+    <script>
+        function mostrarFormulario() {
+            document.getElementById('fondo-oscuro').style.display = 'block';
+            document.getElementById('form-nueva-noticia').style.display = 'block';
+        }
+
+        function ocultarFormulario() {
+            document.getElementById('fondo-oscuro').style.display = 'none';
+            document.getElementById('form-nueva-noticia').style.display = 'none';
+        }
+
+        function agregarNoticia() {
+            const clave = document.getElementById('clave').value;
+            if (clave !== '123456') {
+                alert('Clave incorrecta');
+                return;
+            }
+
+            const titulo = document.getElementById('titulo').value;
+            const fecha = document.getElementById('fecha').value;
+            const contenido = document.getElementById('contenido').value;
+            const imagen = document.getElementById('imagen').value;
+
+            if (!titulo || !fecha || !contenido) {
+                alert('Por favor, completa todos los campos obligatorios.');
+                return;
+            }
+
+            const contenedor = document.getElementById('contenedor-noticias');
+            const nuevaNoticia = document.createElement('div');
+            nuevaNoticia.classList.add('noticia-card');
+
+            nuevaNoticia.innerHTML = `
+                <img src="${imagen || 'https://via.placeholder.com/400x200'}" alt="Noticia">
+                <div class="noticia-content">
+                    <h3>${titulo}</h3>
+                    <p>${contenido}</p>
+                    <p><strong>${fecha}</strong></p>
+                </div>
+            `;
+
+            contenedor.prepend(nuevaNoticia);
+            ocultarFormulario();
+            alert('Noticia publicada exitosamente.');
+        }
+    </script>
+</body>
+</html>
+
