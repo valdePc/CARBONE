@@ -114,15 +114,28 @@
             border-radius: 10px;
             animation: float 10s infinite alternate;
         }
-
         @keyframes float {
-            from {
-                transform: translateY(0);
-            }
-            to {
-                transform: translateY(-20px);
-            }
-        }
+    0% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(30px, -30px); /* Mover en diagonal */
+    }
+    50% {
+        transform: translate(0, -50px); /* Mover solo hacia arriba */
+    }
+    75% {
+        transform: translate(-30px, -30px); /* Mover en diagonal opuesta */
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.section img {
+    animation: float 6s cubic-bezier(0.42, 0, 0.58, 1) infinite; /* Suaviza el movimiento */
+}
+
 
         footer {
             background: #333;
@@ -144,6 +157,15 @@
             .section:nth-child(even) {
                 flex-direction: column;
             }
+            /* Tamaño reducido para imágenes en secciones */
+.small-image {
+    width: 200px; /* Ancho ajustado */
+    height: auto; /* Mantiene la proporción */
+    display: block; /* Asegura que se comporten como bloques */
+    margin: 0 auto; /* Centra las imágenes horizontalmente */
+    border-radius: 10px; /* Bordes redondeados (opcional) */
+}
+
         }
     </style>
 
@@ -152,14 +174,13 @@
 
 <header>
     <div class="navbar">
-        <div class="logo"><strong>CARBONE</strong></div>
+        <a href="noticias.html">NOTICIAS</a>
         <ul>
             
             <a href="aplicar.html">Aplicar</a>
             <li><a href="#que-hacemos">¿Que hacemos?</a></li>
             <li><a href="#por-qué-elegirnos">¿por qué elegirnos?</a></li>
             <li><a href="#nuestros-servicios">Servicios</a></li>
-            <a href="noticias.html">Noticias</a>
         </ul>
     </div>
 </header>
@@ -179,7 +200,7 @@
             <li><strong>Servicio:</strong> Ofrecemos soluciones prácticas y accesibles para satisfacer las necesidades de cada cliente.</li>
         </ul>
     </div>
-    <img src="tu-imagen1.jpg" alt="Imagen de dinamismo">
+    <img class="small-image" src="image/Image20240211211724.jpg" alt="Imagen de dinamismo">
 </section>
 
 <section id="por-qué-elegirnos" class="section">
@@ -193,7 +214,7 @@
             <li>Entrega rápida y confiable.</li>
         </ul>
     </div>
-    <img src="tu-imagen1.jpg" alt="Imagen de confianza">
+    <img class="small-image" src="image/Image20240211211706.jpg" alt="Imagen de confianza">
 </section>
 
 <section id="nuestros-servicios" class="section">
@@ -206,8 +227,9 @@
             <li><strong>Productos de limpieza:</strong> Artículos efectivos que simplifican tu día a día.</li>
         </ul>
     </div>
-    <img src="tu-imagen2.jpg" alt="Imagen de servicios">
+    <img class="small-image" src="image/Image20240211211627.jpg" alt="Imagen de servicios">
 </section>
+
 
 
 <footer>
