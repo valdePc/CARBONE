@@ -3,175 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbone - Tienda Online</title>
+    <title>Impulsa Tu Negocio</title>
     <style>
-        /* Estilos globales */
-        body {
+        /* Reiniciar estilos básicos */
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
             color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
         }
 
         header {
-            background: linear-gradient(45deg, #a2218e, #00acac);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            font-size: 1.8rem;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            padding: 1rem 0;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            padding: 15px 30px;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        nav a {
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar li {
+            margin: 0 15px;
+        }
+
+        .navbar a {
             text-decoration: none;
-            font-size: 1rem;
             color: #333;
             font-weight: bold;
-            transition: color 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
         }
 
-        nav a:hover {
-            color: #a2218e;
+        .navbar a:hover {
+            background: #00acac;
+            color: #fff;
         }
 
-        .banner {
-            text-align: center;
-            padding: 4rem 1rem;
-            background: linear-gradient(135deg, #00acac, #f8a51b);
+        .hero {
+            background: linear-gradient(to right, #00acac, #00acac);
             color: white;
-            border-radius: 10px;
-            margin: 2rem auto;
-            width: 90%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .productos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .producto {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 60px 20px;
         }
 
-        .producto:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
         }
 
-        .producto h3 {
-            color: #a2218e;
+        .hero p {
             font-size: 1.2rem;
         }
 
-        .producto p {
-            margin: 1rem 0;
-            color: #555;
+        .section {
+            padding: 60px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
         }
 
-        .producto button {
-            background: #00acac;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.2rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
+        .section:nth-child(even) {
+            flex-direction: row-reverse;
         }
 
-        .producto button:hover {
-            background: #f8a51b;
+        .section-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #00acac;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .section img {
+            flex: 1;
+            max-width: 100%;
+            border-radius: 10px;
+            animation: float 10s infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-20px);
+            }
         }
 
         footer {
-            text-align: center;
-            padding: 2rem;
-            background: #a2218e;
+            background: #333;
             color: white;
-            margin-top: 2rem;
+            text-align: center;
+            padding: 20px;
         }
 
         footer p {
             margin: 0;
         }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .section {
+                flex-direction: column;
+            }
+
+            .section:nth-child(even) {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Encabezado -->
-    <header>
-        Carbone - Encuentra lo Mejor para Ti
-    </header>
 
-    <!-- Menú de Navegación -->
-    <nav>
-        <a href="index.html">Inicio</a>
-        <a href="noticias.html">Noticias</a>
-        <a href="about.html">Nosotros</a>
-        <a href="contact.html">Contacto</a>
-        <a href="aplicar.html">Aplicar</a>
-    </nav>
+<header>
+    <div class="navbar">
+        <div class="logo"><strong>CARBONE</strong></div>
+        <ul>
+            
+            <a href="aplicar.html">Aplicar</a>
+            <li><a href="#que-hacemos">¿Que hacemos?</a></li>
+            <li><a href="#por-qué-elegirnos">¿por qué elegirnos?</a></li>
+            <li><a href="#nuestros-servicios">Servicios</a></li>
+            <a href="noticias.html">Noticias</a>
+        </ul>
+    </div>
+</header>
 
-    <!-- Banner Principal -->
-    <section class="banner">
-        <h1>Bienvenido a Carbone</h1>
-        <p>Productos seleccionados para realzar tu estilo de vida.</p>
-    </section>
+<section class="hero">
+    <h1>Únete a nuestro equipo</h1>
+    <p>Completa el formulario de inscripción y forma parte de nuestra red.</p>
+</section>
 
-    <!-- Productos -->
-    <section id="productos" class="productos">
-        <div class="producto">
-            <h3>Café Gourmet</h3>
-            <p>El sabor que despierta tus sentidos.</p>
-            <button data-url="caffe.html">Ver</button>
-        </div>
-        <div class="producto">
-            <h3>Producto de limpieza</h3>
-            <p>La limpieza que tu hogar merece.</p>
-            <button data-url="limpieza.html">Ver</button>
-        </div>
-        <div class="producto">
-            <h3>Productos de Belleza</h3>
-            <p>El cuidado que tu piel necesita.</p>
-            <button data-url="belleza.html">Ver</button>
-        </div>
-    </section>
+<section id="que-hacemos" class="section">
+    <div class="section-content">
+        <h2>¿Qué hacemos?</h2>
+        <p>Nos especializamos en brindarte apoyo para generar ingresos extra, ayudándote a desarrollar tu potencial y alcanzar tus metas.</p>
+        <ul>
+            <li><strong>Dinámico:</strong> Nos enfocamos en maximizar esfuerzos para lograr un impacto significativo.</li>
+            <li><strong>Apasionado:</strong> Nuestro compromiso es el motor principal, superando títulos y posiciones.</li>
+            <li><strong>Servicio:</strong> Ofrecemos soluciones prácticas y accesibles para satisfacer las necesidades de cada cliente.</li>
+        </ul>
+    </div>
+    <img src="tu-imagen1.jpg" alt="Imagen de dinamismo">
+</section>
 
-    <!-- JavaScript Interno -->
-    <script>
-        document.querySelectorAll('.producto button').forEach(button => {
-            button.addEventListener('click', () => {
-                const url = button.getAttribute('data-url');
-                window.location.href = url;
-            });
-        });
-    </script>
+<section id="por-que-elegirnos" class="section">
+    <div class="section-content">
+        <h2>¿Por qué elegirnos?</h2>
+        <p>Somos tu mejor opción porque combinamos productos de alta calidad con un servicio excepcional. Nos esforzamos por superar tus expectativas y garantizar tu satisfacción.</p>
+        <ul>
+            <li>Productos 100% garantizados.</li>
+            <li>Atención personalizada para cada cliente.</li>
+            <li>Precios competitivos.</li>
+            <li>Entrega rápida y confiable.</li>
+        </ul>
+    </div>
+    <img src="tu-imagen1.jpg" alt="Imagen de confianza">
+</section>
 
-    <!-- Pie de Página -->
-    <footer>
-        <p>© 2024 Carbone. Todos los derechos reservados.</p>
-    </footer>
+<section id="nuestros-servicios" class="section">
+    <div class="section-content">
+        <h2>Nuestros Servicios</h2>
+        <p>Estamos comprometidos en conectar contigo y ofrecer soluciones específicas que agreguen valor como socios:</p>
+        <ul>
+            <li><strong>Venta de café:</strong> Productos seleccionados de alta calidad, ideales para el mercado local e internacional.</li>
+            <li><strong>Productos de belleza:</strong> Líneas innovadoras para el cuidado personal que cumplen con las demandas actuales.</li>
+            <li><strong>Productos de limpieza:</strong> Artículos efectivos que simplifican tu día a día.</li>
+        </ul>
+    </div>
+    <img src="tu-imagen2.jpg" alt="Imagen de servicios">
+</section>
+
+
+<footer>
+    <p>&copy; 2024 Carbone. Todos los derechos reservados.</p>
+</footer>
+
 </body>
 </html>
