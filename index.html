@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ANTONIO CARBONE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <style>
         /* Reiniciar estilos básicos */
         * {
@@ -112,30 +114,34 @@
             flex: 1;
             max-width: 100%;
             border-radius: 10px;
-            animation: float 10s infinite alternate;
+            animation: float 6s cubic-bezier(0.42, 0, 0.58, 1) infinite;
         }
+
         @keyframes float {
-    0% {
-        transform: translate(0, 0);
-    }
-    25% {
-        transform: translate(30px, -30px); /* Mover en diagonal */
-    }
-    50% {
-        transform: translate(0, -50px); /* Mover solo hacia arriba */
-    }
-    75% {
-        transform: translate(-30px, -30px); /* Mover en diagonal opuesta */
-    }
-    100% {
-        transform: translate(0, 0);
-    }
-}
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(30px, -30px);
+            }
+            50% {
+                transform: translate(0, -50px);
+            }
+            75% {
+                transform: translate(-30px, -30px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
 
-.section img {
-    animation: float 6s cubic-bezier(0.42, 0, 0.58, 1) infinite; /* Suaviza el movimiento */
-}
-
+        .small-image {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+        }
 
         footer {
             background: #333;
@@ -157,17 +163,145 @@
             .section:nth-child(even) {
                 flex-direction: column;
             }
-            /* Tamaño reducido para imágenes en secciones */
-.small-image {
-    width: 200px; /* Ancho ajustado */
-    height: auto; /* Mantiene la proporción */
-    display: block; /* Asegura que se comporten como bloques */
-    margin: 0 auto; /* Centra las imágenes horizontalmente */
-    border-radius: 10px; /* Bordes redondeados (opcional) */
-}
-
         }
-    </style>
+
+        /* Estilos para el formulario */
+        #aplicar {
+            padding: 4rem 1rem;
+            background-color: #f7f7f7;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        #aplicar.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #aplicar h2 {
+            text-align: center;
+            color: #00acac;
+            margin-bottom: 2rem;
+        }
+
+        #aplicar form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: pop-in 0.8s ease-out;
+        }
+
+        @keyframes pop-in {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        #aplicar label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        #aplicar input, #aplicar textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #aplicar input:focus, #aplicar textarea:focus {
+            border-color: #00acac;
+            box-shadow: 0 0 10px #00acac;
+        }
+
+        #aplicar button {
+            background: #00acac;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        #aplicar button:hover {
+            background: #f8a51b;
+            transform: scale(1.05);
+        }
+        
+    /* Sección de redes sociales */
+    #redes-sociales {
+        padding: 2rem 1rem;
+        text-align: center;
+        background: linear-gradient(to right, #00acac, #a2218e);
+        color: white;
+        margin-top: 2rem;
+    }
+
+    #redes-sociales h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: white;
+        color: #fff;
+        font-size: 1.8rem;
+        text-decoration: none;
+        transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+    }
+
+    /* Colores de las redes */
+    .icon.facebook {
+        background-color: #3b5998;
+    }
+
+    .icon.instagram {
+        background-color: #e1306c;
+    }
+
+    .icon.twitter {
+        background-color: #1da1f2;
+    }
+
+    .icon.linkedin {
+        background-color: #0077b5;
+    }
+
+    /* Efecto al pasar el mouse */
+    .icon:hover {
+        transform: translateY(-10px) scale(1.1); /* Rebote dinámico */
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+
 
 </head>
 <body>
@@ -177,7 +311,7 @@
         <a href="noticias.html">NOTICIAS</a>
         <ul>
             
-            <a href="aplicar.html">Aplicar</a>
+            <li><a href="#aplicar">Aplicar</a></li>
             <li><a href="#que-hacemos">¿Que hacemos?</a></li>
             <li><a href="#por-qué-elegirnos">¿por qué elegirnos?</a></li>
             <li><a href="#nuestros-servicios">Servicios</a></li>
@@ -230,26 +364,71 @@
     <img class="small-image" src="image/Image20240211211627.jpg" alt="Imagen de servicios">
 </section>
 
+<section id="aplicar" class="section">
+    <div class="section-content">
+        <h2>Formulario de registro</h2>
+        <div>
+            <label for="nombre">Nombre Completo</label>
+            <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div>
+            <label for="cedula">Cédula</label>
+            <input type="text" id="cedula" name="cedula" pattern="\d{3}-\d{7}-\d{1}" placeholder="000-0000000-0" required>
+        </div>
+        <div>
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" name="direccion" required>
+        </div>
+        <div>
+            <label for="telefono">Número de Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" pattern="[0-9]{10}" placeholder="Ejemplo: 8091234567" required>
+        </div>
+        <div>
+            <label for="mensaje">Cuéntanos sobre ti</label>
+            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+        </div>
+        <div style="text-align: center;">
+            <button type="submit">Enviar Aplicación</button>
+        </div>
+    </form>
+</section>
+
+<section id="redes-sociales">
+    <h2>Síguenos en nuestras redes</h2>
+    <div class="social-icons">
+        <a href="https://facebook.com" target="_blank" class="icon facebook" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="icon instagram" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" class="icon twitter" aria-label="Twitter">
+            <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="icon linkedin" aria-label="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+        </a>
+    </div>
+</section>
+
 
 
 <footer>
     <p>&copy; 2024 Carbone. Todos los derechos reservados.</p>
 </footer>
 
-<script>
-    const sections = document.querySelectorAll('.section');
+<<script>
+    const sections = document.querySelectorAll('.section, #aplicar');
 
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('show');
-            } else {
-                entry.target.classList.remove('show');
             }
         });
     }, { threshold: 0.1 });
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
         observer.observe(section);
     });
 </script>
