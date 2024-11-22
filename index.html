@@ -78,6 +78,14 @@
             align-items: center;
             justify-content: space-between;
             gap: 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .section.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section:nth-child(even) {
@@ -138,6 +146,7 @@
             }
         }
     </style>
+
 </head>
 <body>
 
@@ -173,7 +182,7 @@
     <img src="tu-imagen1.jpg" alt="Imagen de dinamismo">
 </section>
 
-<section id="por-que-elegirnos" class="section">
+<section id="por-qué-elegirnos" class="section">
     <div class="section-content">
         <h2>¿Por qué elegirnos?</h2>
         <p>Somos tu mejor opción porque combinamos productos de alta calidad con un servicio excepcional. Nos esforzamos por superar tus expectativas y garantizar tu satisfacción.</p>
@@ -204,6 +213,24 @@
 <footer>
     <p>&copy; 2024 Carbone. Todos los derechos reservados.</p>
 </footer>
+
+<script>
+    const sections = document.querySelectorAll('.section');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            } else {
+                entry.target.classList.remove('show');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+</script>
 
 </body>
 </html>
