@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ANTONIO CARBONE</title>
@@ -299,6 +300,119 @@
         transform: translateY(-10px) scale(1.1); /* Rebote dinámico */
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     }
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden; /* Evita el desplazamiento lateral */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+}
+
+img, .section img {
+    max-width: 100%; /* Evita que las imágenes excedan el ancho */
+    height: auto;
+}
+body, html {
+    width: 100%; /* Garantiza que el contenido no exceda el ancho de la pantalla */
+    overflow-x: hidden; /* Oculta cualquier contenido desbordado lateralmente */
+}
+
+.container, .section {
+    max-width: 100%; /* Evita que los contenedores sobrepasen el ancho */
+    margin: 0 auto; /* Centra el contenido */
+    padding: 0 1rem; /* Agrega espacio interior para evitar bordes cortados */
+}
+    /* Estilos para centrar y hacer responsivo el video */
+    .video-container {
+        display: flex;
+        justify-content: center; /* Centrado horizontal */
+        align-items: center; /* Centrado vertical */
+        margin: 15px 0;
+        padding: 15px;
+        background: #f7f7f7;
+        border-radius: 10px;
+    }
+
+    .video-container video {
+        max-width: 100%; /* El video no excederá el ancho de la pantalla */
+        height: auto; /* Mantiene la proporción del video */
+        border: 2px solid #a2218e;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .video-container {
+            padding: 10px; /* Reduce el padding en pantallas pequeñas */
+        }
+    }
+    
+    /* Ajustes para pantallas pequeñas */
+    @media (max-width: 768px) {
+        header {
+            flex-wrap: wrap; /* Asegura que el contenido no se desborde */
+            text-align: center;
+        }
+
+        .navbar ul {
+            flex-direction: column; /* Coloca los enlaces en una columna */
+        }
+
+        .navbar li {
+            margin: 10px 0;
+        }
+
+        .section img {
+            max-width: 80%; /* Reduce el tamaño de las imágenes en pantallas pequeñas */
+            margin: 0 auto; /* Centra las imágenes */
+        }
+
+        .hero h1 {
+            font-size: 2rem; /* Reduce el tamaño del texto del título */
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+    }
+    .section img {
+    max-width: 100%; /* La imagen no excederá el ancho de su contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    max-height: 400px; /* Limita la altura máxima */
+    object-fit: cover; /* Asegura que la imagen se recorte si excede los límites */
+    margin: 0 auto; /* Centra la imagen */
+    display: block; /* Evita espacios extra debajo de la imagen */
+}
+@media (min-width: 1000px) {
+    .section img {
+        max-width: 50%; /* Reduce el tamaño de la imagen al 70% del contenedor */
+        max-height: 400px; /* Reduce la altura máxima en pantallas grandes */
+    }
+}
+.navbar ul {
+    display: flex; /* Mantiene los enlaces en fila */
+    flex-direction: row; /* Asegura que los elementos estén alineados horizontalmente */
+    justify-content: center; /* Centra los enlaces en el contenedor */
+    gap: 15px; /* Espaciado entre los enlaces */
+}
+
+.navbar li {
+    margin: 0; /* Elimina cualquier margen adicional */
+}
+
+
+
 </style>
 
 
@@ -307,22 +421,31 @@
 <body>
 
 <header>
-    <div class="navbar">
-        <a href="noticias.html">NOTICIAS</a>
-        <ul>
-            
+  <nav class="navbar">
+        <div class="logo">
+            <a href="noticias.html">NOTICIAS</a>
+        </div>
+        <ul class="nav-links">
             <li><a href="#aplicar">Aplicar</a></li>
-            <li><a href="#que-hacemos">¿Que hacemos?</a></li>
-            <li><a href="#por-qué-elegirnos">¿por qué elegirnos?</a></li>
+            <li><a href="#que-hacemos">¿Qué hacemos?</a></li>
+            <li><a href="#por-qué-elegirnos">¿Por qué elegirnos?</a></li>
             <li><a href="#nuestros-servicios">Servicios</a></li>
         </ul>
-    </div>
+    </nav>
 </header>
 
 <section class="hero">
     <h1>Únete a nuestro equipo</h1>
     <p>Completa el formulario de inscripción y forma parte de nuestra red.</p>
 </section>
+
+<div class="video-container">
+    <video controls autoplay muted loop>
+        <source src="image/Video de WhatsApp 2024-11-22 a las 07.44.58_d9c90233.mp4" type="video/mp4">
+        Tu navegador no soporta videos HTML5. Por favor, actualízalo para poder ver este contenido.
+    </video>
+</div>
+
 
 <section id="que-hacemos" class="section">
     <div class="section-content">
@@ -337,7 +460,10 @@
     <img class="small-image" src="image/Image20240211211724.jpg" alt="Imagen de dinamismo">
 </section>
 
+
+
 <section id="por-qué-elegirnos" class="section">
+
     <div class="section-content">
         <h2>¿Por qué elegirnos?</h2>
         <p>Somos tu mejor opción porque combinamos productos de alta calidad con un servicio excepcional. Nos esforzamos por superar tus expectativas y garantizar tu satisfacción.</p>
@@ -411,13 +537,11 @@
     </div>
 </section>
 
-
-
 <footer>
     <p>&copy; 2024 Carbone. Todos los derechos reservados.</p>
 </footer>
 
-<<script>
+<script>
     const sections = document.querySelectorAll('.section, #aplicar');
 
     const observer = new IntersectionObserver((entries) => {
@@ -432,6 +556,7 @@
         observer.observe(section);
     });
 </script>
+
 
 </body>
 </html>
