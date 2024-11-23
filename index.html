@@ -437,6 +437,7 @@ body, html {
 <section class="hero">
     <h1>Únete a nuestro equipo</h1>
     <p>Completa el formulario de inscripción y forma parte de nuestra red.</p>
+    <p>En una de nuestras tantas areas disponible.</p>
 </section>
 
 <div class="video-container">
@@ -457,7 +458,7 @@ body, html {
             <li><strong>Servicio:</strong> Ofrecemos soluciones prácticas y accesibles para satisfacer las necesidades de cada cliente.</li>
         </ul>
     </div>
-    <img class="small-image" src="image/Image20240211211724.jpg" alt="Imagen de dinamismo">
+    <img class="small-image" src="image\04ec3b01-22fd-4431-8fcc-a21c7b522c58.jpg" alt="Imagen de dinamismo">
 </section>
 
 
@@ -474,7 +475,7 @@ body, html {
             <li>Entrega rápida y confiable.</li>
         </ul>
     </div>
-    <img class="small-image" src="image/Image20240211211706.jpg" alt="Imagen de confianza">
+    <img class="small-image" src="image\descarga.jpg" alt="Imagen de confianza">
 </section>
 
 <section id="nuestros-servicios" class="section">
@@ -487,37 +488,131 @@ body, html {
             <li><strong>Productos de limpieza:</strong> Artículos efectivos que simplifican tu día a día.</li>
         </ul>
     </div>
-    <img class="small-image" src="image/Image20240211211627.jpg" alt="Imagen de servicios">
+    <img class="small-image" src="image\images.jpg" alt="Imagen de servicios">
 </section>
 
 <section id="aplicar" class="section">
     <div class="section-content">
         <h2>Formulario de registro</h2>
-        <div>
-            <label for="nombre">Nombre Completo</label>
-            <input type="text" id="nombre" name="nombre" required>
-        </div>
-        <div>
-            <label for="cedula">Cédula</label>
-            <input type="text" id="cedula" name="cedula" pattern="\d{3}-\d{7}-\d{1}" placeholder="000-0000000-0" required>
-        </div>
-        <div>
-            <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" name="direccion" required>
-        </div>
-        <div>
-            <label for="telefono">Número de Teléfono</label>
-            <input type="tel" id="telefono" name="telefono" pattern="[0-9]{10}" placeholder="Ejemplo: 8091234567" required>
-        </div>
-        <div>
-            <label for="mensaje">Cuéntanos sobre ti</label>
-            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
-        </div>
-        <div style="text-align: center;">
-            <button type="submit">Enviar Aplicación</button>
-        </div>
-    </form>
+        <form id="vacantesForm" enctype="multipart/form-data">
+            <div>
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div>
+                <label for="cedula">Cédula</label>
+                <input type="text" id="cedula" name="cedula" pattern="\d{3}-\d{7}-\d{1}" placeholder="000-0000000-0" required>
+            </div>
+            <div>
+                <label for="direccion">Dirección</label>
+                <input type="text" id="direccion" name="direccion" required>
+            </div>
+            <div>
+                <label for="telefono">Número de Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" pattern="[0-9]{10}" placeholder="Ejemplo: 8091234567" required>
+            </div>
+            <div>
+                <label for="mensaje">Cuéntanos sobre ti</label>
+                <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+            </div>
+            <div>
+                <label for="pdf">Subir PDF:</label>
+                <input type="file" id="pdf" name="pdf" accept=".pdf" required>
+            </div>
+            <div style="text-align: center;">
+                <button type="submit">Enviar Aplicación</button>
+            </div>
+        </form>
+  
 </section>
+
+<script>
+  const form = document.getElementById("vacantesForm");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Evitar que la página se recargue
+
+    // Obtener el archivo PDF
+    const pdfFile = document.getElementById("pdf").files[0];
+    if (!pdfFile) {
+        alert("Por favor, sube un archivo PDF.");
+        return;
+    }
+
+    // Configurar los datos para subir el archivo a Cloudinary
+    const formData = new FormData();
+    formData.append("file", pdfFile);
+    formData.append("upload_preset", "vacantes"); // Asegúrate de que el upload preset esté configurado como "Unsigned" en Cloudinary.
+
+    try {
+        // Realizar la solicitud para subir el archivo a Cloudinary
+        const uploadResponse = await fetch("https://api.cloudinary.com/v1_1/dlcrwcdkn/upload", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+            throw new Error("Error al subir el archivo a Cloudinary.");
+        }
+
+        const uploadData = await uploadResponse.json();
+        const pdfUrl = uploadData.secure_url; // Obtener la URL del archivo en Cloudinary
+
+        // Crear el objeto de datos para enviar a Airtable
+        const data = {
+            records: [
+                {
+                    fields: {
+                        Nombre: document.getElementById("nombre").value,
+                        Cédula: document.getElementById("cedula").value,
+                        Dirección: document.getElementById("direccion").value,
+                        Teléfono: document.getElementById("telefono").value,
+                        Mensaje: document.getElementById("mensaje").value,
+                        PDF: [{ url: pdfUrl }], // Guardar la URL del PDF como adjunto
+                    },
+                },
+            ],
+        };
+
+        // Enviar los datos a Airtable
+        const airtableResponse = await fetch("https://api.airtable.com/v0/app96HBFFihQrDQud/Nuevas%20vacantes", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer patWGN3JA193K23O3.a83e4416d554217922008d62e8d90798ff56d55cac646c5f4113dc95cb1b7fde",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (airtableResponse.ok) {
+            alert("¡Aplicación enviada con éxito!");
+            form.reset(); // Reinicia el formulario
+        } else {
+            throw new Error("Error al enviar los datos a Airtable.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Ocurrió un error. Por favor, verifica tu conexión a internet o la configuración del sistema.");
+    }
+});
+
+const express = require("express");
+const crypto = require("crypto");
+const app = express();
+
+app.get("/generate-signature", (req, res) => {
+    const timestamp = Math.round(new Date().getTime() / 1000); // Genera un timestamp actual
+    const public_id = req.query.public_id || "default_public_id"; // Puedes incluir un public_id si es necesario
+    const apiSecret = "7k-cWTqqhraGS4RJK..."; // Tu API Secret desde Cloudinary
+    const stringToSign = `public_id=${public_id}&timestamp=${timestamp}`;
+    const signature = crypto.createHash("sha256").update(stringToSign + apiSecret).digest("hex");
+    res.json({ signature, timestamp });
+});
+
+app.listen(3000, () => console.log("Servidor escuchando en el puerto 3000"));
+
+</script>
+
 
 <section id="redes-sociales">
     <h2>Síguenos en nuestras redes</h2>
