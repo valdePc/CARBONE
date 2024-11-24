@@ -1,0 +1,5 @@
+# Ignorar la carpeta node_modules
+node_modules/
+
+# Ignorar específicamente el archivo electron.exe
+node_modules/electron/dist/electron.exe
