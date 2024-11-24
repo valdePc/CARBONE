@@ -90,16 +90,27 @@
         // Función para obtener la ubicación del usuario
         async function obtenerUbicacion() {
     try {
-        const response = await fetch("https://ipapi.co/json/");
+        const response = await fetch("http://api.ipstack.com/check?access_key=be5fa117252445f7fb78a0a8a7219472");
         if (!response.ok) throw new Error("No se pudo obtener la ubicación");
+
         const data = await response.json();
-        return data.country_name || "Desconocido"; // Retorna el nombre del país
+        const ubicacionDetallada = `${data.city}, ${data.region_name}, ${data.country_name}`;
+        console.log("Ubicación detectada:", ubicacionDetallada);
+        return ubicacionDetallada || "Desconocido";
     } catch (error) {
         console.error("Error al obtener la ubicación:", error);
         return "Desconocido";
     }
 }
 
+
+function detectarOrigen() {
+    if (window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost") {
+        return "Local";
+    } else {
+        return "Producción (" + window.location.hostname + ")";
+    }
+}
     
         // Función para detectar el dispositivo
         function obtenerDispositivo() {
@@ -119,35 +130,42 @@
         }
     
         // Función para enviar los datos a Airtable
-        async function enviarDatosAirtable(fecha, dispositivo, ubicacion) {
-            const data = {
-                records: [
-                    {
-                        fields: {
-                            Fecha: fecha,
-                            Dispositivo: dispositivo,
-                            Ubicacion: ubicacion,
-                        },
-                    },
-                ],
-            };
-    
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${airtableApiKey}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data),
-                });
-    
-                if (!response.ok) throw new Error("Error al enviar los datos a Airtable");
-                console.log("Datos enviados a Airtable exitosamente");
-            } catch (error) {
-                console.error("Error al enviar datos a Airtable:", error);
-            }
-        }
+// Función para enviar los datos a Airtable
+async function enviarDatosAirtable(fecha, dispositivo, ubicacion) {
+    // Detectar el origen (Local o Producción)
+    const origen = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost" 
+        ? "Local" 
+        : "Producción";
+
+    const data = {
+        records: [
+            {
+                fields: {
+                    Fecha: fecha,
+                    Dispositivo: dispositivo,
+                    Ubicacion: ubicacion,
+                    Origen: origen, // Agregar el origen
+                },
+            },
+        ],
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${airtableApiKey}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) throw new Error("Error al enviar los datos a Airtable");
+        console.log("Datos enviados a Airtable exitosamente");
+    } catch (error) {
+        console.error("Error al enviar datos a Airtable:", error);
+    }
+}
     
         // Función principal
         async function registrarDatos() {
