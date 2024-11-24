@@ -539,11 +539,17 @@ body, html {
                 <input type="tel" id="telefono" name="telefono" pattern="[0-9]{10}" placeholder="Ejemplo: 8091234567" required>
             </div>
             <div>
+                <label for="posicion">Posición de interés</label>
+                <input type="text" id="posicion" name="posicion" placeholder="Escribe la posición deseada" required>
+            </div>
+            
+            
+            <div>
                 <label for="mensaje">Cuéntanos sobre ti</label>
                 <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
             </div>
             <div>
-                <label for="pdf">Subir PDF:</label>
+                <label for="pdf">Compartenos tu curriculo en PDF:</label>
                 <input type="file" id="pdf" name="pdf" accept=".pdf" required>
             </div>
             <div style="text-align: center;">
@@ -594,6 +600,7 @@ body, html {
                         Cédula: document.getElementById("cedula").value,
                         Dirección: document.getElementById("direccion").value,
                         Teléfono: document.getElementById("telefono").value,
+                        "Posición de interés": document.getElementById("posicion").value, // Campo libre
                         Mensaje: document.getElementById("mensaje").value,
                         PDF: [{ url: pdfUrl }], // Guardar la URL del PDF como adjunto
                     },
