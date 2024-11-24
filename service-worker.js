@@ -1,20 +1,13 @@
-const CACHE_NAME = "carbone-cache-v1";
-const urlsToCache = ["./index.html", "./image/logo-corporativo.png"];
-
-// Instalar el Service Worker
-self.addEventListener("install", (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(urlsToCache);
-        })
-    );
+// Registrar eventos básicos del Service Worker
+self.addEventListener('install', (event) => {
+    console.log('Service Worker instalado');
 });
 
-// Interceptar las solicitudes y responder desde la caché
-self.addEventListener("fetch", (event) => {
-    event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
-        })
-    );
+self.addEventListener('activate', (event) => {
+    console.log('Service Worker activado');
+});
+
+// Registrar un evento para capturar solicitudes (opcional)
+self.addEventListener('fetch', (event) => {
+    console.log('Solicitud interceptada:', event.request.url);
 });

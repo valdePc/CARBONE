@@ -20,8 +20,6 @@
     <!-- Título de la página -->
     <title>Antonio Carbone</title>
 </head>
-<!-- Vincular el manifest.json -->
-<link rel="manifest" href="./manifest.json">
 
 <!-- Registrar el Service Worker -->
 <script>
@@ -445,8 +443,10 @@ body, html {
 
 
 </head>
+<link rel="manifest" href="./manifest.json">
+
 <body>
-    <button id="downloadPage">Descargar esta página</button>
+ 
 <header>
   <nav class="navbar">
         <div class="logo">
@@ -552,21 +552,6 @@ body, html {
         </form>
   
 </section>
-
-<button id="downloadPage">Descargar esta página</button>
-
-<script>
-    document.getElementById('downloadPage').addEventListener('click', () => {
-        const content = document.documentElement.outerHTML; // Captura el HTML de la página actual
-        const blob = new Blob([content], { type: 'text/html' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'MiPagina.html'; // Nombre del archivo descargado
-        a.click();
-        URL.revokeObjectURL(a.href);
-    });
-</script>
-
 
 <script>
   const form = document.getElementById("vacantesForm");
@@ -692,6 +677,8 @@ app.listen(3000, () => console.log("Servidor escuchando en el puerto 3000"));
     sections.forEach((section) => {
         observer.observe(section);
     });
+
+
 </script>
 
 
