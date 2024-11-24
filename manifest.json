@@ -1,0 +1,22 @@
+{
+    "name": "Carbone App",
+    "short_name": "Carbone",
+    "description": "Aplicación progresiva de Carbone",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#00acac",
+    "icons": [
+      {
+        "src": "image/logo-corporativo.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "image/logo-corporativo.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

@@ -228,59 +228,138 @@
 
     <!-- Formulario Nueva Noticia -->
     <div id="form-nueva-noticia">
-        <input type="password" id="clave" placeholder="Clave (123456)" required>
-        <input type="text" id="titulo" placeholder="Título de la Noticia" required>
+        <input type="password" id="clave" placeholder="Digite la Clave" required>
         <input type="date" id="fecha" required>
+        <input type="text" id="titulo" placeholder="Título de la Noticia" required>
         <textarea id="contenido" placeholder="Contenido de la Noticia" rows="5" required></textarea>
         <input type="url" id="imagen" placeholder="URL de la Imagen (opcional)">
+        <input type="url" id="url" placeholder="URL del artículo (opcional)">
         <button onclick="agregarNoticia()">Publicar</button>
     </div>
 
     <script>
-        function mostrarFormulario() {
-            document.getElementById('fondo-oscuro').style.display = 'block';
-            document.getElementById('form-nueva-noticia').style.display = 'block';
+        
+        const AIRTABLE_API_KEY = "patWGN3JA193K23O3.a83e4416d554217922008d62e8d90798ff56d55cac646c5f4113dc95cb1b7fde"; 
+        const AIRTABLE_BASE_URL = "https://api.airtable.com/v0/app96HBFFihQrDQud/Noticias"; // Tabla Noticias
+       // Mostrar formulario
+    function mostrarFormulario() {
+        document.getElementById('fondo-oscuro').style.display = 'block';
+        document.getElementById('form-nueva-noticia').style.display = 'block';
+    }
+
+    // Ocultar formulario
+    function ocultarFormulario() {
+        document.getElementById('fondo-oscuro').style.display = 'none';
+        document.getElementById('form-nueva-noticia').style.display = 'none';
+    }
+
+    async function agregarNoticia() {
+    const clave = document.getElementById('clave').value;
+    if (clave !== 'Carbone24*') {
+        alert('Clave incorrecta');
+        return;
+    }
+
+    const titulo = document.getElementById('titulo').value;
+    const fecha = document.getElementById('fecha').value;
+    const contenido = document.getElementById('contenido').value;
+    const imagen = document.getElementById('imagen').value;
+
+    if (!titulo || !fecha || !contenido) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return;
+    }
+
+    const nuevaNoticia = {
+        records: [
+            {
+                fields: {
+                    Título: titulo,
+                    Fecha: fecha,
+                    Contenido: contenido,
+                    Imagen: imagen || 'https://via.placeholder.com/400x200' // Imagen predeterminada
+                }
+            }
+        ]
+    };
+
+    try {
+        const response = await fetch(AIRTABLE_BASE_URL, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${AIRTABLE_API_KEY}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(nuevaNoticia)
+        });
+
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            console.error("Error de Airtable:", errorResponse);
+            throw new Error(errorResponse.error.message || "Error al guardar la noticia en Airtable");
         }
 
-        function ocultarFormulario() {
-            document.getElementById('fondo-oscuro').style.display = 'none';
-            document.getElementById('form-nueva-noticia').style.display = 'none';
+        alert("Noticia publicada exitosamente.");
+        cargarNoticias(); // Refrescar las noticias
+        ocultarFormulario();
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Hubo un error al publicar la noticia: " + error.message);
+    }
+}
+
+
+    // Cargar noticias desde Airtable
+    async function cargarNoticias() {
+    const contenedor = document.getElementById('contenedor-noticias');
+    contenedor.innerHTML = ""; // Limpiar antes de cargar nuevas noticias
+
+    try {
+        const response = await fetch(AIRTABLE_BASE_URL, {
+            headers: {
+                "Authorization": `Bearer ${AIRTABLE_API_KEY}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al cargar las noticias desde Airtable");
         }
 
-        function agregarNoticia() {
-            const clave = document.getElementById('clave').value;
-            if (clave !== '123456') {
-                alert('Clave incorrecta');
-                return;
-            }
+        const data = await response.json();
 
-            const titulo = document.getElementById('titulo').value;
-            const fecha = document.getElementById('fecha').value;
-            const contenido = document.getElementById('contenido').value;
-            const imagen = document.getElementById('imagen').value;
+        if (data.records.length === 0) {
+            contenedor.innerHTML = "<p>No hay noticias disponibles por el momento.</p>";
+            return;
+        }
 
-            if (!titulo || !fecha || !contenido) {
-                alert('Por favor, completa todos los campos obligatorios.');
-                return;
-            }
+        data.records.forEach(record => {
+            const { Título, Fecha, Contenido, Imagen, URL } = record.fields;
 
-            const contenedor = document.getElementById('contenedor-noticias');
-            const nuevaNoticia = document.createElement('div');
-            nuevaNoticia.classList.add('noticia-card');
-
-            nuevaNoticia.innerHTML = `
-                <img src="${imagen || 'https://via.placeholder.com/400x200'}" alt="Noticia">
-                <div class="noticia-content">
-                    <h3>${titulo}</h3>
-                    <p>${contenido}</p>
-                    <p><strong>${fecha}</strong></p>
+            const noticiaHTML = `
+                <div class="noticia-card">
+                    <a href="${URL || '#'}" target="_blank" rel="noopener noreferrer">
+                        <img src="${Imagen || 'https://via.placeholder.com/400x200'}" alt="${Título}">
+                    </a>
+                    <div class="noticia-content">
+                        <h3>
+                            <a href="${URL || '#'}" target="_blank" rel="noopener noreferrer">
+                                ${Título || 'Sin título'}
+                            </a>
+                        </h3>
+                        <p>${Contenido || 'Contenido no disponible'}</p>
+                        <p><strong>${Fecha || 'Fecha no especificada'}</strong></p>
+                    </div>
                 </div>
             `;
 
-            contenedor.prepend(nuevaNoticia);
-            ocultarFormulario();
-            alert('Noticia publicada exitosamente.');
-        }
+            contenedor.insertAdjacentHTML('beforeend', noticiaHTML);
+        });
+    } catch (error) {
+        console.error(error);
+        contenedor.innerHTML = "<p>Hubo un problema al cargar las noticias. Intenta nuevamente más tarde.</p>";
+    }
+}
+
     </script>
 </body>
 </html>
