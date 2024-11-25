@@ -207,7 +207,7 @@
 
         #aplicar h2 {
             text-align: center;
-            color: #00acac;
+            color: goldenrod;
             margin-bottom: 2rem;
         }
 
@@ -265,7 +265,7 @@
         }
 
         #aplicar button:hover {
-            background: #f8a51b;
+            background: green;
             transform: scale(1.05);
         }
         
@@ -440,7 +440,7 @@ body, html {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: goldenrod;
+      background-color: black;
       color: white;
       border: none;
       border-radius: 50%;
@@ -454,7 +454,7 @@ body, html {
     }
 
     .floating-button:hover {
-      background-color: #007a7a;
+      background-color: goldenrod;
       transform: scale(1.1);
     }
 
@@ -580,6 +580,97 @@ body, html {
         </form>
   
 </section>
+<script>
+    const airtableApiKey = "patWGN3JA193K23O3.a83e4416d554217922008d62e8d90798ff56d55cac646c5f4113dc95cb1b7fde";
+    const baseId = "app96HBFFihQrDQud";
+    const tableName = "Estadisticas";
+    const apiUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`;
+
+    // Función para obtener la ubicación del usuario
+    async function obtenerUbicacion() {
+            try {
+                const response = await fetch("https://api.ipstack.com/check?access_key=be5fa117252445f7fb78a0a8a7219472");
+                if (!response.ok) throw new Error("No se pudo obtener la ubicación");
+                const data = await response.json();
+                return `${data.city}, ${data.region_name}, ${data.country_name}`;
+            } catch (error) {
+                console.error("Error al obtener la ubicación:", error);
+                return "Desconocido";
+            }
+        }
+
+    // Función para detectar el dispositivo
+    function obtenerDispositivo() {
+        const userAgent = navigator.userAgent;
+        if (/mobile/i.test(userAgent)) {
+            return "Móvil";
+        } else if (/tablet/i.test(userAgent)) {
+            return "Tablet";
+        } else {
+            return "PC";
+        }
+    }
+
+    // Función para obtener la fecha y hora actual
+    function obtenerFechaHora() {
+            return new Date().toLocaleString();
+        }
+
+        async function enviarDatosAirtable(fechaHora, dispositivo, ubicacion) {
+            const origen = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+                ? "Local"
+                : "Producción";
+
+            const data = {
+                records: [
+                    {
+                        fields: {
+                            Fecha: fechaHora,
+                            Dispositivo: dispositivo,
+                            Ubicacion: ubicacion,
+                            Origen: origen
+                        }
+                    }
+                ]
+            };
+
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${airtableApiKey}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) throw new Error("Error al enviar los datos a Airtable");
+                console.log("Datos enviados a Airtable exitosamente");
+            } catch (error) {
+                console.error("Error al enviar datos a Airtable:", error);
+            }
+        }
+
+
+    // Función principal
+    async function registrarDatos() {
+            const fechaHora = obtenerFechaHora();
+            const dispositivo = obtenerDispositivo();
+            const ubicacion = await obtenerUbicacion();
+
+            console.log("Datos detectados:", { fechaHora, dispositivo, ubicacion });
+            enviarDatosAirtable(fechaHora, dispositivo, ubicacion);
+        }
+
+        function regresarInicio() {
+            window.location.href = "index.html"; // Cambia la ruta si está en un directorio diferente
+        }
+
+        window.onload = registrarDatos;
+</script>
+
+
 
 <script>
   const form = document.getElementById("vacantesForm");

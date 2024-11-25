@@ -47,6 +47,29 @@
             background-color: #00acac;
             color: white;
         }
+        /* Botón flotante */
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #a2218e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .floating-button:hover {
+            background-color: #79016b;
+            transform: scale(1.1);
+        }
+        
     </style>
 </head>
 <body>
@@ -81,36 +104,152 @@
             </table>
         </section>
     </main>
+    <button class="floating-button" onclick="regresarInicio()">ANT.C</button>
     <script>
-        const airtableApiKey = "patWGN3JA193K23O3.a83e4416d554217922008d62e8d90798ff56d55cac646c5f4113dc95cb1b7fde";
-        const baseId = "app96HBFFihQrDQud";
-        const tableName = "Estadisticas";
-        const apiUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`;
-    
-        // Función para obtener la ubicación del usuario
-        async function obtenerUbicacion() {
-    try {
-        const response = await fetch("http://api.ipstack.com/check?access_key=be5fa117252445f7fb78a0a8a7219472");
-        if (!response.ok) throw new Error("No se pudo obtener la ubicación");
 
-        const data = await response.json();
-        const ubicacionDetallada = `${data.city}, ${data.region_name}, ${data.country_name}`;
-        console.log("Ubicación detectada:", ubicacionDetallada);
-        return ubicacionDetallada || "Desconocido";
-    } catch (error) {
-        console.error("Error al obtener la ubicación:", error);
-        return "Desconocido";
+    // Inicialización global
+    let records = []; // Declaración global para los registros
+
+    function regresarInicio() {
+        window.location.href = "index.html"; // Cambia esta ruta si tu archivo index.html está en otro directorio
+    }
+
+    const airtableApiKey = "patWGN3JA193K23O3.a83e4416d554217922008d62e8d90798ff56d55cac646c5f4113dc95cb1b7fde";
+    const baseId = "app96HBFFihQrDQud";
+    const tableName = "Estadisticas";
+    const apiUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`;
+
+    // Función para obtener la ubicación del usuario
+    async function obtenerUbicacion() {
+        try {
+            const response = await fetch("http://api.ipstack.com/check?access_key=be5fa117252445f7fb78a0a8a7219472");
+            if (!response.ok) throw new Error("No se pudo obtener la ubicación");
+            
+            const data = await response.json();
+            console.log("Datos de ipstack:", data); // Depuración
+            const ubicacionDetallada = `${data.city}, ${data.region_name}, ${data.country_name}`;
+            return ubicacionDetallada || "Desconocido";
+        } catch (error) {
+            console.error("Error al obtener la ubicación:", error.message);
+            return "Desconocido";
+        }
+    }
+
+    async function cargarEstadisticas() {
+        try {
+            const response = await fetch(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${airtableApiKey}`
+                }
+            });
+
+            if (!response.ok) throw new Error("No se pudo obtener los datos de Airtable");
+
+            const data = await response.json();
+            console.log("Datos de Airtable recibidos:", data); // Depuración
+
+            records = data.records || []; // Asignación global
+            if (records.length === 0) {
+                console.warn("No se encontraron registros en Airtable.");
+                document.getElementById("visitasDia").textContent = "0";
+                document.getElementById("visitasMes").textContent = "0";
+                return;
+            }
+
+            const visitasDia = records.filter(record => record.fields.Fecha === obtenerFechaActual()).length;
+            const visitasMes = records.length;
+
+            document.getElementById("visitasDia").textContent = visitasDia;
+            document.getElementById("visitasMes").textContent = visitasMes;
+
+            cargarDistribucionUbicaciones(records);
+            cargarGraficoDispositivos(records);
+        } catch (error) {
+            console.error("Error al cargar estadísticas:", error.message);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        registrarDatos(); // Registrar datos al cargar
+        cargarEstadisticas(); // Cargar estadísticas
+    });
+
+    // ... Resto de tus funciones
+
+
+
+function cargarDistribucionUbicaciones(records) {
+    const ubicaciones = {};
+    records.forEach(record => {
+        const ubicacion = record.fields.Ubicacion || "Desconocido";
+        if (!ubicaciones[ubicacion]) ubicaciones[ubicacion] = 0;
+        ubicaciones[ubicacion]++;
+    });
+
+    console.log("Distribución por ubicaciones:", ubicaciones);
+
+    const total = records.length;
+    const tbody = document.getElementById("tablaUbicaciones");
+    tbody.innerHTML = "";
+
+    if (Object.keys(ubicaciones).length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3">Sin datos disponibles</td></tr>`;
+        return;
+    }
+
+    for (const [ubicacion, cantidad] of Object.entries(ubicaciones)) {
+        const porcentaje = ((cantidad / total) * 100).toFixed(2);
+        const row = `<tr>
+            <td>${ubicacion}</td>
+            <td>${cantidad}</td>
+            <td>${porcentaje}%</td>
+        </tr>`;
+        tbody.innerHTML += row;
     }
 }
 
+        function cargarGraficoDispositivos(records) {
+            const dispositivos = {
+                Móvil: 0,
+                Tablet: 0,
+                PC: 0
+            };
 
-function detectarOrigen() {
-    if (window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost") {
-        return "Local";
-    } else {
-        return "Producción (" + window.location.hostname + ")";
-    }
+            records.forEach(record => {
+                const dispositivo = record.fields.Dispositivo || "Desconocido";
+                if (dispositivos[dispositivo] !== undefined) {
+                    dispositivos[dispositivo]++;
+                }
+            });
+
+            const ctx = document.getElementById("graficoDispositivos").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: Object.keys(dispositivos),
+                    datasets: [{
+                        data: Object.values(dispositivos),
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+        console.log("Registros de Airtable:", records);
+console.log("Visitas del día:", visitasDia);
+console.log("Visitas del mes:", visitasMes);
+
+
+        function detectarOrigen() {
+    const origen = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost" 
+        ? "Local" 
+        : `Producción (${window.location.hostname})`;
+    console.log("Origen detectado:", origen); // Depuración
+    return origen;
 }
+
     
         // Función para detectar el dispositivo
         function obtenerDispositivo() {
@@ -166,7 +305,8 @@ async function enviarDatosAirtable(fecha, dispositivo, ubicacion) {
         console.error("Error al enviar datos a Airtable:", error);
     }
 }
-    
+console.log("Chart.js versión:", Chart?.version || "No cargado");
+
         // Función principal
         async function registrarDatos() {
             const fecha = obtenerFechaActual();
@@ -180,7 +320,16 @@ async function enviarDatosAirtable(fecha, dispositivo, ubicacion) {
         }
     
         // Ejecutar la función al cargar la página
-        window.onload = registrarDatos;
+        document.addEventListener("DOMContentLoaded", registrarDatos);
+
+
+        if (records.length > 0) {
+    cargarDistribucionUbicaciones(records);
+    cargarGraficoDispositivos(records);
+} else {
+    console.warn("No hay registros disponibles.");
+}
+
     </script>
     
 </body>
