@@ -583,7 +583,7 @@ body, html {
 <script>
     const airtableApiKey = "patWGN3JA193K23O3.a83e4416d554217922008d62e8d90798ff56d55cac646c5f4113dc95cb1b7fde";
     const baseId = "app96HBFFihQrDQud";
-    const tableName = "Estadisticas";
+    const tableName = "inventario";
     const apiUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`;
 
     // Función para obtener la ubicación del usuario
@@ -808,7 +808,7 @@ app.listen(3000, () => console.log("Servidor escuchando en el puerto 3000"));
 
       if (userPassword === correctPassword) {
         alert("Contraseña correcta. Redirigiendo a la página de estadísticas...");
-        window.location.href = "estadistica.html"; // Cambia esta ruta según tu configuración
+        window.location.href = "inventario.html"; // Cambia esta ruta según tu configuración
       } else {
         alert("Contraseña incorrecta. Inténtalo de nuevo.");
       }

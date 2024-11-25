@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Almacén</title>
+    <style>
+        /* General */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            margin: 20px 0;
+            color: goldenrod;
+        }
+        section {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: goldenrod;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+        button {
+            background-color: goldenrod;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        button:hover {
+            background-color: #cba332;
+        }
+
+        /* Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        table th {
+            background-color: goldenrod;
+            color: white;
+        }
+        table tr:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+        table tr:hover {
+            background-color: #f9e9b8;
+        }
+
+        /* Botones flotantes y efectos */
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: goldenrod;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .floating-button:hover {
+            background-color: #cba332;
+            transform: scale(1.1);
+        }
+
+        /* Secciones destacadas */
+        #ingreso, #retiro, #consulta, #historial {
+            border: 2px solid goldenrod;
+        }
+
+        /* Encabezados */
+        h1 {
+            font-size: 32px;
+        }
+        h2 {
+            font-size: 24px;
+        }
+
+        /* Resultados dinámicos */
+        #resultadoConsulta {
+            font-weight: bold;
+            color: goldenrod;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control de Almacén</h1>
+
+    <!-- Ingreso de Productos -->
+    <section id="ingreso">
+        <h2>Ingreso de Productos</h2>
+        <form id="formIngreso">
+            <label for="productoIngreso">Nombre del Producto</label>
+            <input type="text" id="productoIngreso" placeholder="Ejemplo: Tornillos" required>
+            
+            <label for="cantidadIngreso">Cantidad</label>
+            <input type="number" id="cantidadIngreso" min="1" placeholder="Cantidad a ingresar" required>
+
+            <button type="submit">Registrar Ingreso</button>
+        </form>
+    </section>
+
+    <!-- Retiro de Productos -->
+    <section id="retiro">
+        <h2>Retiro de Productos</h2>
+        <form id="formRetiro">
+            <label for="productoRetiro">Nombre del Producto</label>
+            <select id="productoRetiro">
+                <option value="">Selecciona un producto</option>
+            </select>
+            
+            <label for="cantidadRetiro">Cantidad a Retirar</label>
+            <input type="number" id="cantidadRetiro" min="1" placeholder="Cantidad a retirar" required>
+            
+            <label for="notaRetiro">Nota (opcional)</label>
+            <textarea id="notaRetiro" placeholder="Detalles del retiro"></textarea>
+
+            <button type="submit">Registrar Retiro</button>
+        </form>
+    </section>
+
+    <!-- Consulta de Inventario -->
+    <section id="consulta">
+        <h2>Consulta de Inventario</h2>
+        <label for="consultaProducto">Nombre del Producto</label>
+        <input type="text" id="consultaProducto" placeholder="Ejemplo: Tornillos">
+        <p id="resultadoConsulta">Cantidad disponible: -</p>
+    </section>
+
+    <!-- Histórico de Movimientos -->
+    <section id="historial">
+        <h2>Histórico de Movimientos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody id="tablaHistorial">
+                <tr>
+                    <td colspan="5">Sin movimientos registrados</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <script>
+        const airtableApiKey = "patWGN3JA193K23O3.a83e4416d554217922008d62e8d90798ff56d55cac646c5f4113dc95cb1b7fde";
+        const baseId = "app96HBFFihQrDQud";
+        const tableName = "Inventario";
+        const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+    
+        let inventario = {}; // Almacenará el inventario (clave: producto, valor: cantidad)
+    
+        // Función para cargar el inventario desde Airtable
+        async function cargarInventario() {
+            try {
+                const response = await fetch(apiUrl, {
+                    headers: { Authorization: `Bearer ${airtableApiKey}` }
+                });
+                const data = await response.json();
+                
+                inventario = {}; // Reiniciar inventario
+                data.records.forEach(record => {
+                    const producto = record.fields.Producto;
+                    const cantidad = record.fields.Cantidad;
+                    inventario[producto] = (inventario[producto] || 0) + cantidad;
+                });
+                actualizarOpcionesRetiro();
+                cargarHistorial(data.records);
+                console.log("Inventario cargado:", inventario);
+            } catch (error) {
+                console.error("Error al cargar el inventario:", error.message);
+            }
+        }
+    
+        // Función para registrar un movimiento (Ingreso o Retiro)
+        async function registrarMovimiento(producto, tipo, cantidad, nota = "") {
+            const fecha = new Date().toISOString(); // Fecha actual en formato ISO
+            const data = {
+                records: [
+                    {
+                        fields: {
+                            Producto: producto,
+                            "Tipo de Movimiento": tipo,
+                            Cantidad: tipo === "Retiro" ? -cantidad : cantidad,
+                            "Fecha del Movimiento": fecha,
+                            Nota: nota,
+                        },
+                    },
+                ],
+            };
+    
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${airtableApiKey}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+    
+                if (!response.ok) throw new Error("Error al registrar el movimiento");
+                console.log("Movimiento registrado exitosamente.");
+            } catch (error) {
+                console.error("Error al enviar datos a Airtable:", error.message);
+            }
+        }
+    
+        // Función para cargar el historial en la tabla
+        function cargarHistorial(records) {
+            const tbody = document.getElementById("tablaHistorial");
+            tbody.innerHTML = ""; // Limpiar tabla
+            records.forEach(record => {
+                const { Producto, Cantidad, "Tipo de Movimiento": tipo, "Fecha del Movimiento": fecha, Nota } = record.fields;
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${new Date(fecha).toLocaleString()}</td>
+                        <td>${Producto}</td>
+                        <td>${tipo}</td>
+                        <td>${Cantidad}</td>
+                        <td>${Nota || "-"}</td>
+                    </tr>`;
+            });
+        }
+    
+        // Función para actualizar las opciones del select de retiro
+        function actualizarOpcionesRetiro() {
+            const select = document.getElementById("productoRetiro");
+            select.innerHTML = '<option value="">Selecciona un producto</option>';
+            Object.keys(inventario).forEach(producto => {
+                select.innerHTML += `<option value="${producto}">${producto}</option>`;
+            });
+        }
+    
+        // Eventos de los formularios
+        document.getElementById("formIngreso").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const producto = document.getElementById("productoIngreso").value.trim();
+            const cantidad = parseInt(document.getElementById("cantidadIngreso").value);
+            if (producto && cantidad > 0) {
+                await registrarMovimiento(producto, "Ingreso", cantidad);
+                await cargarInventario();
+                alert(`Ingreso registrado: ${cantidad} unidades de "${producto}"`);
+                document.getElementById("formIngreso").reset();
+            }
+        });
+    
+        document.getElementById("formRetiro").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const producto = document.getElementById("productoRetiro").value;
+            const cantidad = parseInt(document.getElementById("cantidadRetiro").value);
+            const nota = document.getElementById("notaRetiro").value.trim();
+            if (producto && cantidad > 0 && inventario[producto] >= cantidad) {
+                await registrarMovimiento(producto, "Retiro", cantidad, nota);
+                await cargarInventario();
+                alert(`Retiro registrado: ${cantidad} unidades de "${producto}"`);
+                document.getElementById("formRetiro").reset();
+            } else {
+                alert("Cantidad insuficiente en inventario.");
+            }
+        });
+    
+        // Evento para la consulta de inventario
+        document.getElementById("consultaProducto").addEventListener("input", (e) => {
+            const producto = e.target.value.trim();
+            const cantidad = inventario[producto] || 0;
+            document.getElementById("resultadoConsulta").textContent = `Cantidad disponible: ${cantidad}`;
+        });
+    
+        // Cargar inventario al inicio
+        document.addEventListener("DOMContentLoaded", cargarInventario);
+    </script>
+    
+</body>
+</html>
